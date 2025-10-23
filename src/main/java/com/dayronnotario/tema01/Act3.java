@@ -8,10 +8,18 @@ import java.util.stream.Collectors;
 
 public class Act3 {
     private List<Libro> libros = new ArrayList<>();
-
+    private File xmlFile;
     public Act3(String ruta) {
+        xmlFile = new File(ruta);
+        mapearXML();
+    }
+
+    /**
+     * Pasa los datos del archivo xml a una lista
+     */
+    private void mapearXML() {
         try {
-            File xmlFile = new File(ruta);
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -41,27 +49,35 @@ public class Act3 {
             }
 
         } catch (Exception e) {
-            System.err.println("Error al leer el XML: " + e.getMessage());
+            e.getMessage();
             e.printStackTrace();
         }
     }
 
-    public void mostrarTitulos() {
+    /**
+     * Muestra los titulos de todos los libros
+     * @return true o false dependiendo si se ha podido hacer o no
+     */
+    public boolean mostrarTitulos() {
         if (libros.isEmpty()) {
-            System.out.println("No hay libros cargados.");
-            return;
+            return false;
         }
 
         System.out.println("Títulos de los libros:");
         for (Libro libro : libros) {
             System.out.println("- " + libro.getTitulo());
         }
+        return true;
     }
 
-    public void mostrarConteoPorGenero() {
+    /**
+     * Muestra cuantos libros hay de cada género
+     * @return true o false dependiendo si se ha podido hacer o no
+     */
+    public boolean mostrarConteoPorGenero() {
         if (libros.isEmpty()) {
             System.out.println("No hay libros cargados.");
-            return;
+            return false;
         }
 
         Map<String, Long> conteo = libros.stream()
@@ -74,6 +90,7 @@ public class Act3 {
         conteo.forEach((genero, cantidad) ->
                 System.out.printf("%-15s | %-10d%n", genero, cantidad)
         );
+        return true;
     }
 }
 
@@ -108,6 +125,10 @@ class Libro {
         this.generos = generos;
     }
 
+    /**
+     * Devuelve un String formateado con el nombre del libro y sus géneros
+     * @return String formateado
+     */
     @Override
     public String toString() {
         return String.format("%s (%s)", titulo, String.join(", ", generos));

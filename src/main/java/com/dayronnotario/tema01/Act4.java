@@ -7,10 +7,19 @@ import java.util.*;
 
 public class Act4 {
     private List<Pedido> pedidos = new ArrayList<>();
+    private File xmlFile;
 
     public Act4(String ruta) {
+        xmlFile = new File(ruta);
+        mapearXML();
+    }
+
+    /**
+     * Pasa los datos del archivo xml a una lista
+     */
+    private void mapearXML() {
         try {
-            File xmlFile = new File(ruta);
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -50,6 +59,11 @@ public class Act4 {
         }
     }
 
+    /**
+     * Muestra los items del pedido y calcula el precio total, en caso de que no coincida con el del xml devuelve false
+     * @param idPedido
+     * @return true o false dependiendo si se ha podido hacer lo deseado o si no coincide el precio
+     */
     public boolean mostrarItemsDePedido(String idPedido) {
         Optional<Pedido> pedidoOpt = pedidos.stream()
                 .filter(p -> p.getId().equalsIgnoreCase(idPedido))
@@ -116,12 +130,20 @@ class Pedido {
         this.totalXML = totalXML;
     }
 
+    /**
+     * Calcula el valor total del pedido indicado
+     * @return el valor total
+     */
     public double calcularTotal() {
         return items.stream()
                 .mapToDouble(i -> i.getCantidad() * i.getPrecioUnitario())
                 .sum();
     }
 
+    /**
+     * Devuelve en un String formateado el id del cliente, su nombre y el total del pedido que hay en el xml
+     * @return String formateado
+     */
     @Override
     public String toString() {
         return String.format("Pedido %s (%s) - Total declarado: %.2f€", id, cliente, totalXML);
@@ -149,6 +171,10 @@ class Item {
         return precioUnitario;
     }
 
+    /**
+     * Devuelve como String formateado la descripción del producto, su sku, la cantidad de este y su valor unitario
+     * @return String formateado
+     */
     @Override
     public String toString() {
         return String.format("%s (%s) - Cantidad: %d - Precio: %.2f€",

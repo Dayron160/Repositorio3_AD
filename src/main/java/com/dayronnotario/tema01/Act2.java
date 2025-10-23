@@ -8,10 +8,18 @@ import java.util.stream.Collectors;
 
 public class Act2 {
     private List<Empleado2> empleados = new ArrayList<>();
-
+    private File xmlFile;
     public Act2(String ruta) {
+        xmlFile = new File(ruta);
+        mapearXML();
+    }
+
+    /**
+     * Pasa los datos del archivo xml a una lista
+     */
+    private void mapearXML() {
         try {
-            File xmlFile = new File(ruta);
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(xmlFile);
@@ -41,10 +49,13 @@ public class Act2 {
         }
     }
 
-    public void mostrarDepartamentos() {
+    /**
+     * Muestra el número de empleados y el salario medio de cada departamento
+     * @return true o false dependiendo de si puede o no hacer lo deseado
+     */
+    public boolean mostrarDepartamentos() {
         if (empleados.isEmpty()) {
-            System.out.println("No hay empleados cargados.");
-            return;
+            return true;
         }
 
         Map<String, Double> salarioMedio = empleados.stream()
@@ -65,6 +76,7 @@ public class Act2 {
         for (String dept : salarioMedio.keySet()) {
             System.out.printf("%-15s | %-13d | %-15.2f%n", dept, conteo.get(dept), salarioMedio.get(dept));
         }
+        return true;
     }
 }
 
@@ -105,6 +117,10 @@ class Empleado2 {
         this.salario = salario;
     }
 
+    /**
+     * Devuelve un String formateado con la información del empleado
+     * @return String formateado
+     */
     @Override
     public String toString() {
         return String.format("%s (%s) - %.2f €", nombre, departamento, salario);

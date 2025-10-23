@@ -14,6 +14,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Act1 {
+    /**
+     * Pasa los empleados del xml a un array y lo devuelve
+     * @param path
+     * @return Lista Empleados
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     public static Empleado1[] parse(String path) throws IOException, ParserConfigurationException, SAXException {
         Empleado1[] empleados = null;
         try (FileInputStream fis = new FileInputStream(path)) {
@@ -101,6 +109,10 @@ class Empleado1 {
         this.currency = currency;
     }
 
+    /**
+     * Devuelve un String con toda la información del empleado
+     * @return String
+     */
     @Override
     public String toString() {
         return ("id: " + id + " nombre: " + nombre + " salario: " + Double.toString(salario) + currency);
